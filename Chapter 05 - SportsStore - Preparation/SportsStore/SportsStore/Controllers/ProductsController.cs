@@ -15,7 +15,7 @@ namespace SportsStore.Controllers
 
         public ProductsController()
         {
-            Repository = new ProductRepository();
+            Repository = (IRepository)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IRepository));
         }
 
         public IEnumerable<Product> GetProducts()
@@ -23,16 +23,29 @@ namespace SportsStore.Controllers
             return Repository.Products;
         }
 
-        public Product GetProduct(int id)
+        public IHttpActionResult GetProduct(int id)
         {
-            return Repository.Products.FirstOrDefault(p => p.Id == id);
+            var product = Repository.Products.FirstOrDefault(p => p.Id == id);
+            //Basic Data Validation
+            return product == null ? (IHttpActionResult) BadRequest("No Product Found") : Ok(product);
         }
 
-        public async Task PostProduct(Product product)
+        [Authorize(Roles = "Administrators")]
+        public async Task<IHttpActionResult> PostProduct(Product product)
         {
-            await Repository.SaveProductAsync(product);
+            if (ModelState.IsValid)
+            {
+                await Repository.SaveProductAsync(product);
+                return Ok(product);
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+            
         }
 
+        [Authorize(Roles = "Administrators")]
         public async Task DeleteProduct(int id)
         {
             await Repository.DeleteProductAsync(id);
