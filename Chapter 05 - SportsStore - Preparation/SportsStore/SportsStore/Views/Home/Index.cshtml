@@ -5,5 +5,90 @@
      Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Client Content Will Go Here</h2>
+<script>
+    var testAuth = function () {
+        model.username('Admin');
+        model.password('secret');
+        authenticate();
+    }
+
+    var testDeleteProduct = function () {
+        deleteProduct(2);
+
+    }
+
+    var testChangeProduct = function () {
+        var product = model.products()[2];
+        product.Price = product.Price + 10;
+        saveProduct(product);
+    }
+
+
+    var testDeleteOrder = function () {
+        deleteOrder(1);
+    }
+
+    var testSaveOrder = function () {
+        var order = model.orders()[0];
+        order.TotalPrice = order.TotalPrice + 10;
+        saveOrder(order);
+    }
+</script>
+
+
+<div class="alert alert-danger" data-bind="visible: model.gotError(), text: model.error()">
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Authentication</div>
+    <table class="table table-striped">
+        <tr>
+            <td>Authenticated:</td>
+            <td data-bind="text: model.authenticated()"></td>
+        </tr>
+        <tr>
+            <td>User:</td>
+            <td data-bind="text: model.username()"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button data-bind="click: testAuth" class="btn btn-default">Authenticate</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Product Controller Functions</div>
+    <table class="table table-striped">
+        <tr>
+            <td>
+                <button data-bind="click: getProducts" class="btn btn-default">Get Products</button>
+            </td>
+            <td>
+                <button data-bind="click: testDeleteProduct" class="btn btn-default">Delete Product</button>
+            </td>
+            <td>
+                <button data-bind="click: testChangeProduct" class="btn btn-default">Change Product</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">Order Controller Functions</div>
+    <table class="table table-striped">
+        <tr>
+            <td>
+                <button data-bind="click: getOrders" class="btn btn-default">Get Orders</button>
+            </td>
+            <td>
+                <button data-bind="click: testDeleteOrder" class="btn btn-default">Delete Order</button>
+            </td>
+            <td>
+                <button data-bind="click: testSaveOrder" class="btn btn-default">Save Order</button>
+            </td>
+        </tr>
+    </table>
+</div>
 
